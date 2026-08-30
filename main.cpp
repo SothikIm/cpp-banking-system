@@ -13,6 +13,7 @@ void clearScreen()
     }
 
 void printMenu(){
+    cout << "***Banking System***" << endl;
     cout << "\tSelect one option below: " << endl;
     cout << "\t1. Open an Account" << endl;
     cout << "\t2. Balance Enquiry" << endl;
@@ -20,23 +21,25 @@ void printMenu(){
     cout << "\t4. Withdrawal" << endl;
     cout << "\t5. Close an Account" << endl;
     cout << "\t6. Show All Accounts" << endl;
-    cout << "\t7. Quit" << endl;
+    cout << "\t7. Clear Screen" << endl;
+    cout << "\t8. Quit the system" << endl;
 }
 
 int main(){
     
-    cout << "***Banking System***" << endl;
-    printMenu();
+    
     int choice;
     do
     {
         /* code */
+        printMenu();
         cout << "Enter you choice: "; cin >> choice;
         switch (choice)
         {
         case 1:
             /* code */
             cout << "Do One " << endl;
+            // clearScreen();
             break;
         case 2:
             /* code */
@@ -59,6 +62,9 @@ int main(){
             cout << "Do Six " << endl;
             break;
         case 7:
+            clearScreen();
+            break;
+        case 8:
             /* code */
             cout << "Quit The System" << endl;
             break;
@@ -67,7 +73,7 @@ int main(){
             cout << "Please input a valid number" << endl;
             break;
         }
-    }while (choice != 7);
+    }while (choice != 8);
 
     return 0;
 }

@@ -23,6 +23,11 @@ public:
     double getBalance() const;
 
     void updateBalance(double bal);
+    static void setNextAccountNumber(int accNum);
+    static int getNextAccountNumber();
+    int getAccNo();
+    void deposit(double amount);
+    void withdraw(double amount);
 
     friend std::ostream& operator<<(std::ostream& ofs, User& u);
     friend std::istream& operator>>(std::istream& ifs, User& u);

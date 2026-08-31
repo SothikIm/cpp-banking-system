@@ -5,7 +5,7 @@
 int User::nextAccountNumber = 0;
 
 User::User(std::string fn, std::string ln, double bal): firstName(fn), lastName(ln), balance(bal){
-    accountNumber = ++nextAccountNumber;
+    accountNumber = nextAccountNumber++;
 }
 int User::getAccountNumber() const{
     return accountNumber;
@@ -25,13 +25,27 @@ double User::getBalance() const{
 void User::updateBalance(double bal){
     balance = bal;
 }
-
+void User::setNextAccountNumber(int accNum){
+    nextAccountNumber = accNum;
+}
+int User::getNextAccountNumber(){
+    return nextAccountNumber;
+}
+void User::deposit(double amount){
+    balance += amount;
+}
+void User::withdraw(double amount){
+    balance -= amount;
+}
+int User::getAccNo(){
+    return accountNumber; 
+}
 
 std::ostream & operator<<(std::ostream& COUT, User& u){
     COUT << "First Name: " << u.getFirstName() << std::endl;
     COUT << "Last Name: " << u.getLastName() << std::endl;
     COUT << "Account Number: " << u.getAccountNumber() << std::endl;
-    COUT << "Balance: " << std::fixed << std::setprecision(2) << u.getBalance() << std::endl;
+    COUT << "Balance: " << std::fixed << std::setprecision(2) << u.getBalance() << '\n' << std::endl;
     return COUT;
 }
 

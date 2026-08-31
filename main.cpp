@@ -1,6 +1,22 @@
 #include "user_account.h"
 #include <cstdlib>
+#include <map>
+#include <conio.h>
 using namespace std;
+
+class Bank{
+    private:
+        map<int, User> users;
+    public:
+        Bank();
+        User OpenAccount();
+        User BalanceEnquiry(int accountNumber);
+        User Deposit(int accountNumber,float amount);
+        User Withdraw(int accountNumber,float amount);
+        void CloseAccount(int accountNumber);
+        void ShowAllAccounts();
+        // ~Bank();
+};
 
 void clearScreen()
 {
@@ -9,7 +25,7 @@ void clearScreen()
     #else
         system("clear");
     #endif
-    }
+}
 
 void printMenu(){
     cout << "***Banking System***" << endl;
@@ -25,7 +41,8 @@ void printMenu(){
 }
 
 int main(){
-    
+    Bank b;
+    User u;
     
     int choice;
     do
@@ -37,6 +54,8 @@ int main(){
         {
         case 1:
             /* code */
+            u = b.OpenAccount();
+            cout << u;
             break;
         case 2:
             /* code */
@@ -56,7 +75,20 @@ int main(){
             break;
         case 6:
             /* code */
-            cout << "Do Six " << endl;
+            clearScreen();
+            b.ShowAllAccounts();
+            {
+                while(true){
+                    if(_kbhit){ // Checks whether a key has been pressed.
+                        char key;
+                        cout << "Press Space to continue: ";
+                        key = _getch(); // Get char without press enter
+                        if(key == ' ')
+                            break;
+                    }
+                }
+            }
+            
             break;
         case 7:
             clearScreen();
@@ -75,4 +107,39 @@ int main(){
     
 
     return 0;
+}
+
+Bank::Bank(){
+    User user;
+    ifstream ifs("user_account.txt");
+    if(!ifs){
+        return;
+    }
+    while(!ifs.eof()){
+        ifs >> user;
+        users.insert(pair<int, User>(user.getAccNo(), user));
+    }
+    User::setNextAccountNumber(user.getAccNo());
+    ifs.close();
+}
+
+User Bank::OpenAccount(){
+    User u;
+    cin >> u;
+    ofstream ofs("user_account.txt", ios::trunc);
+    users.insert(pair<int, User>(u.getAccNo(), u));
+    map<int, User>::iterator itr;
+    for(itr = users.begin(); itr != users.end(); itr++){
+        ofs << itr->second;
+    }
+    ofs.close();
+    return u;
+}
+
+void Bank::ShowAllAccounts(){
+    User u;
+    map<int, User>::iterator itr;
+    for(itr = users.begin(); itr != users.end(); itr++){
+        cout << itr->second;
+    }
 }

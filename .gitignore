@@ -2,4 +2,4 @@
 *.o
 *.obj
 *.txt
-*.vscode
+.vscode/

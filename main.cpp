@@ -1,5 +1,3 @@
-#include<iostream>
-#include<fstream>
 #include "user_account.h"
 #include <cstdlib>
 using namespace std;
@@ -39,8 +37,6 @@ int main(){
         {
         case 1:
             /* code */
-            cout << "Do One " << endl;
-            // clearScreen();
             break;
         case 2:
             /* code */
@@ -76,15 +72,7 @@ int main(){
         }
     }while (choice != 8);
 
-    User u1;
-    ifstream ifs("user_account.txt");
-    if (!ifs.is_open())
-        return 1;
-    else{
-        ifs >> u1;
-        cout << u1;
-        ifs.close();
-    }
+    
 
     return 0;
 }

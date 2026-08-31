@@ -24,7 +24,8 @@ public:
 
     void updateBalance(double bal);
 
-    friend std::ostream& operator<<(std::ostream& os, User& u);
-    friend std::ofstream & operator<<(std::ofstream& cout, User& u);
-    friend std::ifstream& operator>>(std::ifstream& ifs, User& u);
+    friend std::ostream& operator<<(std::ostream& ofs, User& u);
+    friend std::istream& operator>>(std::istream& ifs, User& u);
+    friend std::ofstream & operator<<(std::ofstream& COUT, User& u);
+    friend std::ifstream& operator>>(std::ifstream& CIN, User& u);
 };

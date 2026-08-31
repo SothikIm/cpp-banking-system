@@ -4,7 +4,7 @@
 
 int User::nextAccountNumber = 0;
 
-User::User(std::string fn, std::string ln, double bal   ): firstName(fn), lastName(ln), balance(bal){
+User::User(std::string fn, std::string ln, double bal): firstName(fn), lastName(ln), balance(bal){
     accountNumber = ++nextAccountNumber;
 }
 int User::getAccountNumber() const{
@@ -46,4 +46,14 @@ std::ifstream& operator>>(std::ifstream& ifs, User& u){
     >> u.accountNumber
     >> u.balance;
     return ifs;
+}
+
+std::istream& operator>>(std::istream& CIN, User& u){
+    std::cout << "Enter your first name: ";
+    CIN >> u.firstName;
+    std::cout << "Enter your last name: ";
+    CIN >> u.lastName;
+    std::cout << "Enter you balance: ";
+    CIN >> u.balance;
+    return CIN;
 }

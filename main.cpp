@@ -40,12 +40,25 @@ void printMenu(){
     cout << "\t8. Quit the system" << endl;
 }
 
+void getKeyToContinue(){
+    cout << "Press space to continue: ";
+    while(true){
+        if(_kbhit()){
+            char key = _getch();
+            if(key == ' '){
+                break;
+            }
+        }
+    }
+}
+
 int main(){
     Bank b;
     User u;
     
     int choice;
     int accountNumber;
+    float amount;
     do
     {
         /* code */
@@ -77,7 +90,14 @@ int main(){
             break;
         case 3:
             /* code */
-            cout << "Do Three " << endl;
+            cout << "Enter account number: ";
+            cin >> accountNumber;
+            cout << "Enter the amount: ";
+            cin >> amount;
+            u = b.Deposit(accountNumber, amount);
+            cout << endl << "Account is Deposited" << endl;
+            cout << u;
+            getKeyToContinue();
             break;
         case 4:
             /* code */

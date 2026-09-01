@@ -66,6 +66,14 @@ int main(){
             u = b.BalanceEnquiry(accountNumber);
             cout << "Your detial account: " << endl;
             cout << u;
+            cout << "Press space to continue: ";
+            while(true){
+                if(-kbhit()){
+                    char key = _getch();
+                    if (key == ' ')
+                        break;
+                }
+            }
             break;
         case 3:
             /* code */
@@ -152,10 +160,16 @@ void Bank::ShowAllAccounts(){
 User Bank::BalanceEnquiry(int accountNumber){
     map<int, User>::iterator itr = users.find(accountNumber);
     if(itr == users.end()){
-        cout << "Account not found" << endl;
-        return ;
+        throw runtime_error("Account not found");
     }
-    cout << itr->second;
     return itr->second;
 }
 
+User Bank::Deposit(int accountNumber,float amount){
+    map<int, User>::iterator itr = users.find(accountNumber);
+    if(itr == users.end()){
+        throw runtime_error("Account not found");
+    }
+    itr->second.deposit(amount);
+    return itr->second;
+}

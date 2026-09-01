@@ -15,7 +15,7 @@ class Bank{
         User Withdraw(int accountNumber,float amount);
         void CloseAccount(int accountNumber);
         void ShowAllAccounts();
-        // ~Bank();
+        ~Bank();
 };
 
 void clearScreen()
@@ -68,9 +68,11 @@ int main(){
         {
         case 1:
             /* code */
+            cout << User::getNextAccountNumber() << endl;
             u = b.OpenAccount();
             cout << "Congradulation Account is Created" <<endl;
             cout << u;
+            cout << User::getNextAccountNumber() << endl;
             break;
         case 2:
             /* code */
@@ -126,8 +128,18 @@ int main(){
             getKeyToContinue();
             break;
         case 5:
-            /* code */
-            cout << "Do Five " << endl;
+            try{
+                cout << "Enter account number: ";
+                cin >> accountNumber;
+                if (accountNumber > User::getNextAccountNumber()){
+                    throw runtime_error("Account not found");
+                }
+                b.CloseAccount(accountNumber);
+                cout << "Account close successfully" << endl;
+            }
+            catch (exception& e){
+                cerr << e.what() << endl;
+            }
             break;
         case 6:
             /* code */
@@ -159,8 +171,6 @@ int main(){
             break;
         }
     }while (choice != 8);
-
-    
 
     return 0;
 }
@@ -214,4 +224,19 @@ User Bank::Withdraw(int accountNumber,float amount){
     map<int, User>::iterator itr = users.find(accountNumber);
     itr->second.withdraw(amount);
     return itr->second;
+}
+
+void Bank::CloseAccount(int accountNumber){
+    map<int, User>::iterator itr = users.find(accountNumber);
+    cout << "Account delete: " << itr->second;
+    users.erase(accountNumber);
+}
+
+Bank::~Bank(){
+    map<int, User>::iterator itr;
+    ofstream ofs("user_account.txt");
+    for(itr = users.begin(); itr != users.end(); itr++){
+        ofs << itr->second;
+    }
+    ofs.close();
 }

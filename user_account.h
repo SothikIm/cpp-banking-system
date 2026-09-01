@@ -14,7 +14,8 @@ private:
     int accountNumber;
 
 public:
-    User(std::string fn = "", std::string ln = "", double bal = 0);
+    User();
+    User(std::string fn, std::string ln, double bal);
 
     int getAccountNumber() const;
     std::string getFirstName() const;

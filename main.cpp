@@ -45,6 +45,7 @@ int main(){
     User u;
     
     int choice;
+    int accountNumber;
     do
     {
         /* code */
@@ -55,11 +56,16 @@ int main(){
         case 1:
             /* code */
             u = b.OpenAccount();
+            cout << "Congradulation Account is Created" <<endl;
             cout << u;
             break;
         case 2:
             /* code */
-            cout << "Do Two " << endl;
+            cout << "Enter account number: ";
+            cin >> accountNumber;
+            u = b.BalanceEnquiry(accountNumber);
+            cout << "Your detial account: " << endl;
+            cout << u;
             break;
         case 3:
             /* code */
@@ -79,7 +85,7 @@ int main(){
             b.ShowAllAccounts();
             {
                 while(true){
-                    if(_kbhit){ // Checks whether a key has been pressed.
+                    if(_kbhit()){ // Checks whether a key has been pressed.
                         char key;
                         cout << "Press Space to continue: ";
                         key = _getch(); // Get char without press enter
@@ -115,8 +121,7 @@ Bank::Bank(){
     if(!ifs){
         return;
     }
-    while(!ifs.eof()){
-        ifs >> user;
+    while(ifs >> user){
         users.insert(pair<int, User>(user.getAccNo(), user));
     }
     User::setNextAccountNumber(user.getAccNo());
@@ -126,8 +131,8 @@ Bank::Bank(){
 User Bank::OpenAccount(){
     User u;
     cin >> u;
-    ofstream ofs("user_account.txt", ios::trunc);
     users.insert(pair<int, User>(u.getAccNo(), u));
+    ofstream ofs("user_account.txt", ios::trunc);
     map<int, User>::iterator itr;
     for(itr = users.begin(); itr != users.end(); itr++){
         ofs << itr->second;
@@ -143,3 +148,14 @@ void Bank::ShowAllAccounts(){
         cout << itr->second;
     }
 }
+
+User Bank::BalanceEnquiry(int accountNumber){
+    map<int, User>::iterator itr = users.find(accountNumber);
+    if(itr == users.end()){
+        cout << "Account not found" << endl;
+        return ;
+    }
+    cout << itr->second;
+    return itr->second;
+}
+

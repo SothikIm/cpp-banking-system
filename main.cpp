@@ -74,34 +74,56 @@ int main(){
             break;
         case 2:
             /* code */
-            cout << "Enter account number: ";
-            cin >> accountNumber;
-            u = b.BalanceEnquiry(accountNumber);
-            cout << "Your detial account: " << endl;
-            cout << u;
-            cout << "Press space to continue: ";
-            while(true){
-                if(-kbhit()){
-                    char key = _getch();
-                    if (key == ' ')
-                        break;
-                }
+            try{
+                cout << "Enter account number: ";
+                cin >> accountNumber;
+                if(accountNumber > User::getNextAccountNumber())
+                    throw runtime_error("Account not found");
+                    u = b.BalanceEnquiry(accountNumber);
+                    cout << "Your detial account: " << endl;
+                    cout << u;
+                    cout << "Press space to continue: ";
             }
+            catch(exception& e){
+                cerr << e.what() << endl;
+            }
+            getKeyToContinue();
             break;
         case 3:
             /* code */
-            cout << "Enter account number: ";
-            cin >> accountNumber;
-            cout << "Enter the amount: ";
-            cin >> amount;
-            u = b.Deposit(accountNumber, amount);
-            cout << endl << "Account is Deposited" << endl;
-            cout << u;
+            try{
+                cout << "Enter account number: ";
+                cin >> accountNumber;
+                if(accountNumber > User::getNextAccountNumber())
+                    throw runtime_error("Account not found");
+                cout << "Enter the amount: ";
+                cin >> amount;
+                u = b.Deposit(accountNumber, amount);
+                cout << endl << "Account is Deposited" << endl;
+                cout << u;
+            }
+            catch (exception& e){
+                cerr << e.what() << endl;
+            }
             getKeyToContinue();
             break;
         case 4:
             /* code */
-            cout << "Do Four " << endl;
+            try{
+                cout << "Enter account number: ";
+                cin >> accountNumber;
+                if(accountNumber > User::getNextAccountNumber())
+                    throw runtime_error("Account not found");
+                cout << "Enter the amount: ";
+                cin >> amount;
+                u = b.Withdraw(accountNumber, amount);
+                cout << endl << "Account is Withdrawed" << endl;
+                cout << u;
+            }
+            catch (exception& e){
+                cerr << e.what() << endl;
+            }
+            getKeyToContinue();
             break;
         case 5:
             /* code */
@@ -179,17 +201,17 @@ void Bank::ShowAllAccounts(){
 
 User Bank::BalanceEnquiry(int accountNumber){
     map<int, User>::iterator itr = users.find(accountNumber);
-    if(itr == users.end()){
-        throw runtime_error("Account not found");
-    }
     return itr->second;
 }
 
 User Bank::Deposit(int accountNumber,float amount){
     map<int, User>::iterator itr = users.find(accountNumber);
-    if(itr == users.end()){
-        throw runtime_error("Account not found");
-    }
     itr->second.deposit(amount);
+    return itr->second;
+}
+
+User Bank::Withdraw(int accountNumber,float amount){
+    map<int, User>::iterator itr = users.find(accountNumber);
+    itr->second.withdraw(amount);
     return itr->second;
 }

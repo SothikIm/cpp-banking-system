@@ -15,6 +15,7 @@ class Bank{
         User Withdraw(int accountNumber,float amount);
         void CloseAccount(int accountNumber);
         void ShowAllAccounts();
+        bool HasThisAccount(int accountNumber);
         ~Bank();
 };
 
@@ -87,12 +88,12 @@ int main(){
             try{
                 cout << "Enter account number: ";
                 cin >> accountNumber;
-                if(accountNumber > User::getNextAccountNumber())
+                if(!b.HasThisAccount(accountNumber))
                     throw runtime_error("Account not found");
-                    u = b.BalanceEnquiry(accountNumber);
-                    cout << "Your detial account: " << endl;
-                    cout << u;
-                    cout << "Press space to continue: ";
+                u = b.BalanceEnquiry(accountNumber);
+                cout << "Your detial account: " << endl;
+                cout << u;
+                cout << "Press space to continue: ";
             }
             catch(exception& e){
                 cerr << e.what() << endl;
@@ -104,7 +105,7 @@ int main(){
             try{
                 cout << "Enter account number: ";
                 cin >> accountNumber;
-                if(accountNumber > User::getNextAccountNumber())
+                if(!b.HasThisAccount(accountNumber))
                     throw runtime_error("Account not found");
                 cout << "Enter the amount: ";
                 cin >> amount;
@@ -122,7 +123,7 @@ int main(){
             try{
                 cout << "Enter account number: ";
                 cin >> accountNumber;
-                if(accountNumber > User::getNextAccountNumber())
+                if(!b.HasThisAccount(accountNumber))
                     throw runtime_error("Account not found");
                 cout << "Enter the amount: ";
                 cin >> amount;
@@ -139,7 +140,8 @@ int main(){
             try{
                 cout << "Enter account number: ";
                 cin >> accountNumber;
-                if (accountNumber > User::getNextAccountNumber()){
+                map<int, User>::iterator itr;
+                if (!b.HasThisAccount(accountNumber)){
                     throw runtime_error("Account not found");
                 }
                 b.CloseAccount(accountNumber);
@@ -246,4 +248,12 @@ Bank::~Bank(){
         ofs << itr->second;
     }
     ofs.close();
+}
+
+bool Bank::HasThisAccount(int accountNumber){
+    map<int, User>::iterator itr = users.find(accountNumber);
+    if(itr == users.end()){
+        return false;
+    }
+    return true;
 }

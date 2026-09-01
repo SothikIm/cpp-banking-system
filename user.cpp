@@ -7,7 +7,7 @@ int User::nextAccountNumber = 0;
 User::User(){}
 
 User::User(std::string fn, std::string ln, double bal): firstName(fn), lastName(ln), balance(bal){
-    accountNumber = nextAccountNumber++;
+    accountNumber = ++nextAccountNumber;
 }
 int User::getAccountNumber() const{
     return accountNumber;

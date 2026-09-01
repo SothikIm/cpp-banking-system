@@ -9,7 +9,7 @@ class Bank{
         map<int, User> users;
     public:
         Bank();
-        User OpenAccount();
+        User OpenAccount(string fn, string ln, double bal);
         User BalanceEnquiry(int accountNumber);
         User Deposit(int accountNumber,float amount);
         User Withdraw(int accountNumber,float amount);
@@ -59,6 +59,10 @@ int main(){
     int choice;
     int accountNumber;
     float amount;
+
+    string fn;
+    string ln;
+    double bal;
     do
     {
         /* code */
@@ -68,11 +72,15 @@ int main(){
         {
         case 1:
             /* code */
-            cout << User::getNextAccountNumber() << endl;
-            u = b.OpenAccount();
+            cout << "Enter your fist name: ";
+            cin >> fn;
+            cout << "Enter your last name: ";
+            cin >> ln;
+            cout << "Enter your balance: ";
+            cin >> bal;
+            u = b.OpenAccount(fn, ln, bal);
             cout << "Congradulation Account is Created" <<endl;
             cout << u;
-            cout << User::getNextAccountNumber() << endl;
             break;
         case 2:
             /* code */
@@ -188,9 +196,8 @@ Bank::Bank(){
     ifs.close();
 }
 
-User Bank::OpenAccount(){
-    User u;
-    cin >> u;
+User Bank::OpenAccount(string fn, string ln, double bal){
+    User u(fn, ln, bal);
     users.insert(pair<int, User>(u.getAccNo(), u));
     ofstream ofs("user_account.txt", ios::trunc);
     map<int, User>::iterator itr;

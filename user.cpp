@@ -6,7 +6,10 @@ int User::nextAccountNumber = 0;
 
 User::User(){}
 
-User::User(std::string fn, std::string ln, double bal): firstName(fn), lastName(ln), balance(bal){
+User::User(std::string fn, std::string ln, double bal): firstName(fn), lastName(ln){
+    if(bal < 0)
+        throw std::invalid_argument("Bal must greater than 0");
+    balance = bal;
     accountNumber = ++nextAccountNumber;
 }
 int User::getAccountNumber() const{
@@ -37,6 +40,10 @@ void User::deposit(double amount){
     balance += amount;
 }
 void User::withdraw(double amount){
+    if (amount > balance){
+        std::cout << "The amount to withdraw must smaller than your balance";
+        return;
+    }
     balance -= amount;
 }
 int User::getAccNo(){

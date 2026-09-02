@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <map>
 #include <conio.h>
+#include<limits>
 using namespace std;
 
 class Bank{
@@ -44,13 +45,39 @@ void printMenu(){
 void getKeyToContinue(){
     cout << "Press space to continue: ";
     while(true){
-        if(_kbhit()){
-            char key = _getch();
+        if(_kbhit()){ // check whether key is press or not
+            char key = _getch(); // get the key without input
             if(key == ' '){
                 break;
             }
         }
     }
+}
+
+template <typename T>  
+T inputVariable(const string messages){
+    T var;
+    while(true)
+    {
+        try{
+            cout << messages;
+            if(!(cin >> var)){
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw runtime_error("Invalid Input");
+            }
+            break;
+        }
+        catch (runtime_error& e){
+            cerr << e.what() << endl;
+        }
+    }
+    return var;
+}
+
+void requireAccount(Bank& b, int accountNumber){
+    if(!b.HasThisAccount(accountNumber))
+        throw runtime_error("Account not found");
 }
 
 int main(){
@@ -68,7 +95,7 @@ int main(){
     {
         /* code */
         printMenu();
-        cout << "Enter you choice: "; cin >> choice;
+        choice = inputVariable<int>("Enter your choice: ");
         switch (choice)
         {
         case 1:
@@ -77,8 +104,7 @@ int main(){
             cin >> fn;
             cout << "Enter your last name: ";
             cin >> ln;
-            cout << "Enter your balance: ";
-            cin >> bal;
+            bal = inputVariable<double>("Enter your balance: ");
             u = b.OpenAccount(fn, ln, bal);
             cout << "Congradulation Account is Created" <<endl;
             cout << u;
@@ -86,14 +112,11 @@ int main(){
         case 2:
             /* code */
             try{
-                cout << "Enter account number: ";
-                cin >> accountNumber;
-                if(!b.HasThisAccount(accountNumber))
-                    throw runtime_error("Account not found");
+                accountNumber = inputVariable<int>("Enter your account number: ");
+                requireAccount(b, accountNumber);
                 u = b.BalanceEnquiry(accountNumber);
-                cout << "Your detial account: " << endl;
+                cout << endl << "Your detial account: " << endl;
                 cout << u;
-                cout << "Press space to continue: ";
             }
             catch(exception& e){
                 cerr << e.what() << endl;
@@ -103,12 +126,9 @@ int main(){
         case 3:
             /* code */
             try{
-                cout << "Enter account number: ";
-                cin >> accountNumber;
-                if(!b.HasThisAccount(accountNumber))
-                    throw runtime_error("Account not found");
-                cout << "Enter the amount: ";
-                cin >> amount;
+                accountNumber = inputVariable<int>("Enter your account number: ");
+                requireAccount(b, accountNumber);
+                amount = inputVariable<double>("Enter your amount: ");
                 u = b.Deposit(accountNumber, amount);
                 cout << endl << "Account is Deposited" << endl;
                 cout << u;
@@ -121,12 +141,9 @@ int main(){
         case 4:
             /* code */
             try{
-                cout << "Enter account number: ";
-                cin >> accountNumber;
-                if(!b.HasThisAccount(accountNumber))
-                    throw runtime_error("Account not found");
-                cout << "Enter the amount: ";
-                cin >> amount;
+                accountNumber = inputVariable<int>("Enter your account number: ");
+                requireAccount(b, accountNumber);
+                amount = inputVariable<double>("Enter your amount: ");
                 u = b.Withdraw(accountNumber, amount);
                 cout << endl << "Account is Withdrawed" << endl;
                 cout << u;
@@ -138,8 +155,7 @@ int main(){
             break;
         case 5:
             try{
-                cout << "Enter account number: ";
-                cin >> accountNumber;
+                accountNumber = inputVariable<int>("Enter your account number: ");
                 map<int, User>::iterator itr;
                 if (!b.HasThisAccount(accountNumber)){
                     throw runtime_error("Account not found");
@@ -155,18 +171,7 @@ int main(){
             /* code */
             clearScreen();
             b.ShowAllAccounts();
-            {
-                while(true){
-                    if(_kbhit()){ // Checks whether a key has been pressed.
-                        char key;
-                        cout << "Press Space to continue: ";
-                        key = _getch(); // Get char without press enter
-                        if(key == ' ')
-                            break;
-                    }
-                }
-            }
-            
+            getKeyToContinue();
             break;
         case 7:
             clearScreen();
@@ -178,6 +183,7 @@ int main(){
         
         default:
             cout << "Please input a valid number" << endl;
+            getKeyToContinue();
             break;
         }
     }while (choice != 8);
@@ -187,14 +193,16 @@ int main(){
 
 Bank::Bank(){
     User user;
+    int maxAcc;
     ifstream ifs("user_account.txt");
     if(!ifs){
         return;
     }
     while(ifs >> user){
         users.insert(pair<int, User>(user.getAccNo(), user));
+        maxAcc = max(maxAcc, user.getAccNo());
     }
-    User::setNextAccountNumber(user.getAccNo());
+    User::setNextAccountNumber(maxAcc);
     ifs.close();
 }
 
